@@ -2,6 +2,7 @@ const promises = require('fs/promises');
 const path = require('path');
 const fs = require('fs');
 const { pipeline } = require('stream');
+const { formatWithOptions } = require('util');
 
 const SOURCE_DIRECTORY = 'files';
 const DESTINATION_DIRECTORY  = 'files-copy';
@@ -15,6 +16,28 @@ class CopyDirectory {
 
 	async getFileList() {
 		this.fileList = await promises.readdir(this.srcDir);
+	}
+
+	async clearDestDir() {
+		let fileList = await promises.readdir(this.destDir);
+		for (let i = 0; i < fileList.length; i++) {
+			fileList[i] = path.join(this.destDir, fileList[i]);
+		}
+		for (let i = 0; i < fileList.length; i++)
+			await this.deleteFile(fileList[i]);
+	}
+
+	async deleteFile(fileName) {
+		let result = null;
+		result = await new Promise((resolve, reject) => {
+			fs.unlink(fileName, (err => {
+				if (err)
+					reject(err);
+				else
+					resolve();
+			}))
+		})
+		return result;
 	}
 
 	async copyFile(srcFile, destFile) {
@@ -40,6 +63,7 @@ class CopyDirectory {
 	async do() {
 		await this.getFileList();
 		await fs.promises.mkdir(this.destDir, {recursive: true});
+		await this.clearDestDir();
 		for (let i = 0; i < this.fileList.length; i++) {
 			let err = await this.copyFile(path.join(this.srcDir, this.fileList[i]), path.join(this.destDir, this.fileList[i]));
 			console.log(`copy ${this.fileList[i]} ->`, err?'error':'ok');
