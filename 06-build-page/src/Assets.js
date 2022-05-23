@@ -9,12 +9,11 @@ class Assets {
 
 	async build(inputDir, outputDir) {
 		console.log(inputDir, outputDir);
-        let dirScan = new DirScan(inputDir);
-        await dirScan.scan()
-        return;
-		let files = await Utils.enumFilesOnPathShort(inputDir);
-		console.log(files);
-		await Utils.copyFile(path.join(inputDir, 'test.txt'), path.join(outputDir, 'test.txt'))
+        let dirScan = new DirScan(inputDir, outputDir);
+        await dirScan.scan();
+        for (let i = 0; i < dirScan.result.length; i++) {
+            await Utils.copyFile(dirScan.result[i].src, dirScan.result[i].dest);
+        }
 	}
 }
 

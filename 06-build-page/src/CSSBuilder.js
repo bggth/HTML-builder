@@ -1,4 +1,5 @@
-const Utils = require("./Utils");
+const path = require('path');
+const Utils = require('./Utils');
 
 class CSSBuilder {
 	constructor(inputDir) {
@@ -9,8 +10,10 @@ class CSSBuilder {
 	async build(outputFileName) {
 		let cssFiles = await Utils.enumFilesOnPath(this.inputDir);
 		for (let i = 0; i < cssFiles.length; i++) {
-			let css = await Utils.readTextFromFile(cssFiles[i]);
-			this.result += css;
+            if (path.extname(cssFiles[i])==='.css') {
+                let css = await Utils.readTextFromFile(cssFiles[i]);
+                this.result += css;
+            }
 		}
 
 		await Utils.writeTextToFile(outputFileName, this.result);

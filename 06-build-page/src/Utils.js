@@ -52,16 +52,23 @@ class Utils {
 
 	static checkDir = async(dir) => {
 		try {
-			await fs.promises.mkdir(dir);
+			await fs.promises.mkdir(dir, {recursive: true});
 		} catch {
 			
 		}		
 	}
 
+    static getFilePath = (fileName) => {
+        let result = '';
+        result = fileName.substring(0, fileName.lastIndexOf(path.sep));
+        return result;
+    }
+
 	static copyFile = async(srcFileName, destFileName) => {
+        await this.checkDir(this.getFilePath(destFileName));
 		let readStream = fs.createReadStream(srcFileName);
 		let writeStream = fs.createWriteStream(destFileName);
-		await stream.pipeline(readStream, writeStream, (err) => { console.log(err)});
+		await stream.pipeline(readStream, writeStream, (err) => { if (err) console.log(err)});
 	}
 }
 

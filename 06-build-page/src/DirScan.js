@@ -2,8 +2,9 @@ const promises = require('fs/promises');
 const path = require('path');
 
 class DirScan {
-	constructor(directory) {
-		this.directory = directory;
+	constructor(srcDirectory, destDirectory) {
+		this.srcDirectory = srcDirectory;
+		this.destDirectory = destDirectory;
 		this.result = [];
 	}
 
@@ -13,14 +14,16 @@ class DirScan {
 			if (res[i].isDirectory()) {
 				await this.scanPath(path.join(parent, dir), res[i].name);
 			} else {
-				this.result.push(path.join(parent, dir, res[i].name));
+				let srcPath = path.join(parent, dir, res[i].name);
+				let destPath = srcPath.replace(this.srcDirectory, this.destDirectory)
+				let file = {src: srcPath, dest: destPath};
+				this.result.push(file);
 			}
 		}
 	}
 
 	async scan() {
-		await this.scanPath(this.directory, '');
-		console.log(this.result);
+		await this.scanPath(this.srcDirectory, '');
 	}
 }
 
