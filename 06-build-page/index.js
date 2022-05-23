@@ -11,7 +11,6 @@ let config = {
     assets:                 path.join(__dirname, 'assets'),
     assets_output:          path.join(__dirname, 'project-dist','assets')
 }
-console.log(config);
 
 let builder = new Builder(config);
 builder.build();

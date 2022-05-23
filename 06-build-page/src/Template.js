@@ -31,6 +31,7 @@ class Template {
 					let search = elem.trim();
 					let replace = this.searchComponentByName(componentName).html;
 					this.result = this.result.replace(search, replace);
+                    console.log(`process component: ${componentName}`)
 				}
 			}
 		})
@@ -38,6 +39,7 @@ class Template {
 
 	async build(outputFileName) {
 		this.process();
+        console.log(`build template: ${outputFileName}`)
 		await Utils.writeTextToFile(outputFileName, this.result);
 	}
 

@@ -14,7 +14,7 @@ class CSSBuilder {
                 this.result += css;
             }
 		}
-
+        console.log(`build css: ${outputFileName}`);
 		await Utils.writeTextToFile(outputFileName, this.result);
 	}
 }

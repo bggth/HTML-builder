@@ -1,8 +1,8 @@
-const Template = require("./Template");
-const CSSBuilder = require("./CSSBuilder");
-const Assets = require("./Assets");
+const Template = require('./Template');
+const CSSBuilder = require('./CSSBuilder');
+const Assets = require('./Assets');
 const path = require('path');
-const Utils = require("./Utils");
+const Utils = require('./Utils');
 
 class Builder {
 	constructor(config) {
